@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".CreateNoteActivity">
 
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_floatingActionButton"
         android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
             android:id="@+id/title_editText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="2"
             android:hint="Заголовок" />
     </android.support.design.widget.TextInputLayout>
 
@@ -57,52 +59,64 @@
             android:layout_width="match_parent"
             android:id="@+id/text_editText"
             android:layout_height="wrap_content"
+            android:maxLines="4"
             android:inputType="textMultiLine|text|textCapSentences|textAutoComplete|textImeMultiLine"
             android:hint="Заметка" />
     </android.support.design.widget.TextInputLayout>
 
-    <ImageButton
-        android:id="@+id/yellow_imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="8dp"
-        android:background="@android:color/holo_orange_dark"
-        app:layout_constraintBottom_toTopOf="@+id/floatingActionButton"
+    <ToggleButton
+        android:id="@+id/button_yellow"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/circle_button_yellow"
+        android:textOff=""
+        android:textOn="✓"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/note_text"
-        app:srcCompat="@android:color/holo_orange_dark" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
-    <ImageButton
-        android:id="@+id/blue_imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="30dp"
-        android:background="@android:color/holo_blue_dark"
-        app:layout_constraintStart_toEndOf="@+id/yellow_imageButton"
-        app:layout_constraintTop_toTopOf="@+id/yellow_imageButton"
-        app:srcCompat="@android:color/holo_blue_dark" />
+    <ToggleButton
+        android:id="@+id/button_red"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/circle_button_red"
+        android:clickable="true"
+        android:textOff=""
+        android:textOn="✓"
 
-    <ImageButton
-        android:id="@+id/green_imageButon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="30dp"
-        android:background="@android:color/holo_green_dark"
-        app:layout_constraintStart_toEndOf="@+id/blue_imageButton"
-        app:layout_constraintTop_toTopOf="@+id/yellow_imageButton"
-        app:srcCompat="@android:color/holo_green_dark" />
+        app:layout_constraintStart_toEndOf="@+id/button_yellow"
+        app:layout_constraintTop_toTopOf="@+id/button_yellow" />
 
+    <ToggleButton
+        android:id="@+id/button_green"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/circle_button_green"
+        android:textOff=""
+        android:textOn="✓"
+        app:layout_constraintStart_toEndOf="@+id/button_red"
+        app:layout_constraintTop_toTopOf="@+id/button_yellow" />
 
-    <ImageButton
-        android:id="@+id/red_imageButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="30dp"
-        android:background="@android:color/holo_red_light"
-        app:layout_constraintStart_toEndOf="@+id/green_imageButon"
-        app:layout_constraintTop_toTopOf="@+id/yellow_imageButton"
-        app:srcCompat="@android:color/holo_red_light" />
+    <ToggleButton
+        android:id="@+id/button_blue"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/circle_button_blue"
+        android:textOff=""
+        android:textOn="✓"
+        app:layout_constraintStart_toEndOf="@+id/button_green"
+        app:layout_constraintTop_toTopOf="@+id/button_yellow" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="242dp" />
+
 
 </android.support.constraint.ConstraintLayout>

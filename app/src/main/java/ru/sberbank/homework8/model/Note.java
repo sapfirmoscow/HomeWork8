@@ -21,6 +21,15 @@ public class Note {
         mCreationDate = new SimpleDateFormat("d MMM 'at' HH:mm").format(new Date());
     }
 
+
+    public Note(String mTitle, String mText, String mCreationDate, int mColor, int mId) {
+        this.mTitle = mTitle;
+        this.mText = mText;
+        this.mCreationDate = mCreationDate;
+        this.mColor = mColor;
+        this.mId = mId;
+    }
+
     public String getTitle() {
         return mTitle;
     }
