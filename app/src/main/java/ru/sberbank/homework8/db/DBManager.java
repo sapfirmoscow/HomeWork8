@@ -34,6 +34,7 @@ public class DBManager {
             ContentValues contentValues = getNoteContentValues(note);
             //Вставляем нашу записку в базу данных
             db.insert(DBHelper.TABLE_NAME, null, contentValues);
+            Log.d("TEst", "id is " + contentValues.get(DBHelper.COLUMN_ID));
         } catch (SQLiteException e) {
             Log.v("SQLiteException:addNote", e.getMessage());
         } finally {
@@ -62,6 +63,42 @@ public class DBManager {
             }
         }
         return notes;
+    }
+
+    public void updateNote(Note note) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = mDbHelper.getWritableDatabase();
+            ContentValues noteContentValues = getNoteContentValues(note);
+            int upd = db.update(DBHelper.TABLE_NAME, noteContentValues, DBHelper.COLUMN_ID + "=" + note.getId(), null);
+            Log.d("DEB", upd + " ");
+        } catch (SQLiteException e) {
+            Log.v("SQLiteException:updNote", e.getMessage());
+        } finally {
+            if (db != null) {
+                if (db.inTransaction()) db.endTransaction();
+                db.close();
+            }
+
+        }
+    }
+
+
+    public void deleteNote(Note note) {
+        SQLiteDatabase db = null;
+        try {
+            db = mDbHelper.getWritableDatabase();
+            db.delete(DBHelper.TABLE_NAME, DBHelper.COLUMN_ID + "=" + note.getId(), null);
+
+        } catch (SQLiteException e) {
+            Log.v("SQLiteException:delNote", e.getMessage());
+        } finally {
+            if (db != null) {
+                if (db.inTransaction()) db.endTransaction();
+                db.close();
+            }
+        }
     }
 
     private List<Note> pareseCursorToNotes(Cursor cursor) {

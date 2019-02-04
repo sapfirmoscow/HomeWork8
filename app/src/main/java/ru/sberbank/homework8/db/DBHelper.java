@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_COLOR = "color";
     public static final String COLUMN_TEXT = "text";
     public static final String COLUMN_CREATED = "created";
-    private static final int VERSION_DB = 1;
+    private static final int VERSION_DB = 2;
 
 
     private DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
@@ -55,6 +55,5 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private void deleteTables(SQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-
     }
 }

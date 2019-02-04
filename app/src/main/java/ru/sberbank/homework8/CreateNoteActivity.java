@@ -27,6 +27,13 @@ public class CreateNoteActivity extends AppCompatActivity {
     private ToggleButton mGreenButton;
     private ToggleButton mBlueButton;
 
+    private Note mNote;
+    private boolean isUdating = false;
+
+    public static final Intent newIntent(Context context) {
+        return new Intent(context, CreateNoteActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +46,9 @@ public class CreateNoteActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        //если записка редактируется
+        if (checkBundle()) setNote();
     }
 
     private void initListeners() {
@@ -46,8 +56,6 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uploadNote();
-
-                finish();
             }
         });
 
@@ -98,7 +106,6 @@ public class CreateNoteActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void initViews() {
@@ -112,17 +119,16 @@ public class CreateNoteActivity extends AppCompatActivity {
         mGreenButton = findViewById(R.id.button_green);
     }
 
-
-    private Note formNote() {
-        Note tempNote = new Note();
-        tempNote.setText(Objects.requireNonNull(mText.getText()).toString());
-        tempNote.setTitle(Objects.requireNonNull(mTitle.getText()).toString());
-        int color = getCheckedColor();
-        color = ColorUtils.setAlphaComponent(color, 70);
-        tempNote.setColor(color);
-
-
-        return tempNote;
+    private void formNote() {
+        if (!isUdating) {
+            mNote = new Note();
+            mNote.setText(Objects.requireNonNull(mText.getText()).toString());
+            mNote.setTitle(Objects.requireNonNull(mTitle.getText()).toString());
+            //делаем прозрачность 70
+            int color = getCheckedColor();
+            color = ColorUtils.setAlphaComponent(color, 70);
+            mNote.setColor(color);
+        }
     }
 
     private int getCheckedColor() {
@@ -134,22 +140,62 @@ public class CreateNoteActivity extends AppCompatActivity {
     }
 
     private void uploadNote() {
-        final Note tempNote = formNote();
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                DBManager.getInstance(CreateNoteActivity.this).addNote(tempNote);
-
+                if (isUdating) {
+                    updateNote();
+                    DBManager.getInstance(CreateNoteActivity.this).updateNote(mNote);
+                    isUdating = false;
+                } else {
+                    formNote();
+                    DBManager.getInstance(CreateNoteActivity.this).addNote(mNote);
+                }
             }
         }).start();
+
         setResult(1);
+        finish();
     }
 
+    private void setNote() {
+        Note note = new Note();
+        Bundle bundle = getIntent().getExtras().getBundle("note");
 
+        note.setText(bundle.getString("text"));
+        note.setTitle(bundle.getString("title"));
+        note.setId(bundle.getInt("id"));
+        note.setCreationDate(bundle.getString("date"));
+        note.setColor(bundle.getInt("color"));
 
-    public static final Intent newIntent(Context context){
-        return new Intent(context,CreateNoteActivity.class);
+        mText.setText(note.getText());
+        mTitle.setText(note.getTitle());
+        //делаем прозрачность 255
+        int color = note.getColor();
+        color = ColorUtils.setAlphaComponent(color, 255);
+
+        if (color == getResources().getColor(R.color.yellow_light)) mYellowButton.setChecked(true);
+        else if (color == getResources().getColor(R.color.red_light)) mRedButton.setChecked(true);
+        else if (color == getResources().getColor(R.color.green_light))
+            mGreenButton.setChecked(true);
+        else if (color == getResources().getColor(R.color.blue_light)) mBlueButton.setChecked(true);
+
+        mNote = note;
+        isUdating = true;
+    }
+
+    private void updateNote() {
+        mNote.setText(Objects.requireNonNull(mText.getText()).toString());
+        mNote.setTitle(Objects.requireNonNull(mTitle.getText()).toString());
+        //делаем прозрачность 70
+        int color = getCheckedColor();
+        color = ColorUtils.setAlphaComponent(color, 70);
+        mNote.setColor(color);
+    }
+
+    private boolean checkBundle() {
+        return getIntent().getExtras() != null;
     }
 
     @Override
